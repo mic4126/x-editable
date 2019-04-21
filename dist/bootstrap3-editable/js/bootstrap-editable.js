@@ -1,7 +1,7 @@
 /*! X-editable - v1.5.3 
 * In-place editing with Twitter Bootstrap, jQuery UI or pure jQuery
 * http://github.com/vitalets/x-editable
-* Copyright (c) 2018 Vitaliy Potapov; Licensed MIT */
+* Copyright (c) 2019 Vitaliy Potapov; Licensed MIT */
 /**
 Form with single input element, two buttons and two states: normal/loading.
 Applied as jQuery method to DIV tag (not to form tag!). This is because form can be in loading state when spinner shown.
@@ -3168,7 +3168,7 @@ $(function(){
 **/
 (function ($) {
     "use strict";
-    
+
     var Select = function (options) {
         this.init('select', options, Select.defaults);
     };
@@ -3176,21 +3176,21 @@ $(function(){
     $.fn.editableutils.inherit(Select, $.fn.editabletypes.list);
 
     $.extend(Select.prototype, {
-        renderList: function() {
+        renderList: function () {
             this.$input.empty();
             var escape = this.options.escape;
 
-            var fillItems = function($el, data) {
+            var fillItems = function ($el, data) {
                 var attr;
-                if($.isArray(data)) {
-                    for(var i=0; i<data.length; i++) {
+                if ($.isArray(data)) {
+                    for (var i = 0; i < data.length; i++) {
                         attr = {};
-                        if(data[i].children) {
+                        if (data[i].children) {
                             attr.label = data[i].text;
-                            $el.append(fillItems($('<optgroup>', attr), data[i].children)); 
+                            $el.append(fillItems($('<optgroup>', attr), data[i].children));
                         } else {
                             attr.value = data[i].value;
-                            if(data[i].disabled) {
+                            if (data[i].disabled) {
                                 attr.disabled = true;
                             }
                             var $option = $('<option>', attr);
@@ -3200,51 +3200,57 @@ $(function(){
                     }
                 }
                 return $el;
-            };        
+            };
 
             fillItems(this.$input, this.sourceData);
-            
+
             this.setClass();
-            
+
             //enter submit
             this.$input.on('keydown.editable', function (e) {
                 if (e.which === 13) {
                     $(this).closest('form').submit();
                 }
-            });            
+            });
         },
-       
-        value2htmlFinal: function(value, element) {
-            var text = '', 
+        activate: function () {
+            //do nothing or if you want make sure it gets focus
+            var inp = this.$input;
+            setTimeout(function () {
+                inp.focus();
+            }, 100);
+        },
+
+        value2htmlFinal: function (value, element) {
+            var text = '',
                 items = $.fn.editableutils.itemsByValue(value, this.sourceData);
-                
-            if(items.length) {
+
+            if (items.length) {
                 text = items[0].text;
             }
-            
+
             //$(element).text(text);
             $.fn.editabletypes.abstractinput.prototype.value2html.call(this, text, element);
         },
-        
-        autosubmit: function() {
-            this.$input.off('keydown.editable').on('change.editable', function(){
+
+        autosubmit: function () {
+            this.$input.off('keydown.editable').on('change.editable', function () {
                 $(this).closest('form').submit();
             });
         }
-    });      
+    });
 
     Select.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
         /**
         @property tpl 
         @default <select></select>
-        **/         
-        tpl:'<select></select>'
+        **/
+        tpl: '<select></select>'
     });
 
-    $.fn.editabletypes.select = Select;      
+    $.fn.editabletypes.select = Select;
 
 }(window.jQuery));
-
 /**
 List of checkboxes. 
 Internally value stored as javascript array of values.
