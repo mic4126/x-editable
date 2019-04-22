@@ -1,6 +1,8 @@
 # X-editable
 In-place editing with Twitter Bootstrap, jQuery UI or pure jQuery.  
 
+Patched fix from https://github.com/vitalets/x-editable/issues/1043#issuecomment-477107052 to source code.
+
 ## Live Demo
 **http://vitalets.github.io/x-editable/demo.html**
 
